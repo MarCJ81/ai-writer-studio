@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light" data-design="designref.v2/cream-editorial">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>원탭 원고 스튜디오 — 블로그·스레드·상세페이지 완성 원고 조립기</title>
+<meta name="description" content="주제와 내 경험 2~3줄만 넣으면 네이버 블로그 원고, 스레드 훅·첫 댓글, 상세페이지 7단 카피를 조립합니다. API 키 없이 무료로 쓰고, OpenAI·Gemini·Claude·자체 서버를 연결하면 완성 원고를 바로 받습니다. AI 티·표시광고법 위험을 실시간으로 점검합니다." />
+<meta name="theme-color" content="#f3eadd" />
+<meta name="color-scheme" content="light dark" />
+<link rel="canonical" href="https://marcj81.github.io/ai-writer-studio/" />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="styles.css" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"원탭 원고 스튜디오","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"description":"주제·타깃·경험 메모로 블로그 원고, 스레드 타래, 상세페이지 카피를 조립하고 AI 티·표시광고법 위험을 점검하는 무료 웹앱.","inLanguage":"ko"}
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 바로가기</a>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#write" data-tab-link="write" aria-label="원탭 원고 스튜디오 홈">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="34" height="34">
+          <rect x="1" y="1" width="38" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" />
+          <path d="M10 10h20M10 17h13M10 24h20M10 31h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+          <path d="M28.5 26.5l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong>원탭 원고 스튜디오</strong>
+        <small>ONE-TAP DRAFT STUDIO</small>
+      </span>
+    </a>
+
+    <nav class="tabs" role="tablist" aria-label="주요 화면">
+      <button class="tab is-active" role="tab" aria-selected="true" aria-controls="view-write" id="tab-write" data-tab="write">원고 작성</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="view-bridge" id="tab-bridge" data-tab="bridge">AI 브리지</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="view-pro" id="tab-pro" data-tab="pro">Pro 연결<span class="pro-dot" aria-hidden="true"></span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="view-guide" id="tab-guide" data-tab="guide">사용 안내</button>
+    </nav>
+
+    <div class="top-actions">
+      <span class="save-state" id="save-state" aria-live="polite">자동 저장됨</span>
+      <button type="button" class="icon-btn" id="btn-theme" aria-label="다크 모드로 전환" title="라이트/다크">
+        <svg class="ico-sun" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="10" cy="10" r="3.8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 1.8v2M10 16.2v2M1.8 10h2M16.2 10h2M4.3 4.3l1.4 1.4M14.3 14.3l1.4 1.4M15.7 4.3l-1.4 1.4M5.7 14.3l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <svg class="ico-moon" viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><path d="M16.4 12.3A6.8 6.8 0 0 1 7.7 3.6a6.8 6.8 0 1 0 8.7 8.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" id="top-primary">
+        <span id="top-primary-label">초안 조립</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+  <!-- ═══ 원고 작성 ═══ -->
+  <section class="view is-active" id="view-write" role="tabpanel" aria-labelledby="tab-write">
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="kicker">블로그 · 스레드 · 상세페이지 · 2026</p>
+        <h1>주제 한 줄이면, <em>원고 한 편.</em></h1>
+        <p class="hero-lead">포맷과 말투를 고르고, 실제로 겪은 일을 두세 줄 적으면 됩니다. 도입 훅부터 소제목, 체크리스트, 사진 위치, 첫 댓글까지 순서대로 조립합니다. AI 티와 표시광고법 위험은 쓰는 동안 바로 표시됩니다.</p>
+      </div>
+      <ul class="hero-facts" aria-label="이 앱의 기준">
+        <li><strong>포맷 3종</strong><span>블로그 · 스레드 · 상세페이지</span></li>
+        <li><strong>무료 모드 0원</strong><span>API 키 없이 초안 완성</span></li>
+        <li><strong>Pro 4곳</strong><span>OpenAI · Gemini · Claude · 자체 서버</span></li>
+      </ul>
+    </div>
+
+    <div class="studio">
+      <aside class="panel panel-input" aria-label="원고 조건">
+        <form id="write-form" novalidate>
+          <div class="step">
+            <div class="step-head"><span class="step-no">01</span><h2>무엇을 쓸까요</h2></div>
+            <div class="format-grid" id="format-grid" role="radiogroup" aria-label="포맷"></div>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><span class="step-no">02</span><h2>주제와 독자</h2>
+              <button type="button" class="link-btn" id="btn-sample">예시 채우기</button>
+            </div>
+            <label class="field"><span>주제 (한 줄)</span>
+              <input id="f-topic" class="input" type="text" maxlength="60" placeholder="예) 겨울 가습기 고르기" autocomplete="off" />
+            </label>
+            <label class="field"><span>이 글을 읽을 사람</span>
+              <input id="f-target" class="input" type="text" maxlength="40" placeholder="예) 아이 키우는 맞벌이 부모" autocomplete="off" />
+            </label>
+            <label class="field"><span>핵심 키워드 (선택)</span>
+              <input id="f-keyword" class="input" type="text" maxlength="30" placeholder="예) 물통 세척" autocomplete="off" />
+            </label>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><span class="step-no">03</span><h2>내 경험 메모</h2>
+              <button type="button" class="link-btn muted" id="btn-clear-exp">비우기</button>
+            </div>
+            <label class="sr-only" for="f-experience">내 경험 메모</label>
+            <textarea id="f-experience" class="input area" rows="5" placeholder="실제로 겪은 일을 2~3줄로 적으세요.&#10;예) 가습기 3대 사고 2대를 버렸어요.&#10;소리가 커서 밤에 못 켠 게 첫 번째 이유였습니다."></textarea>
+            <div class="input-foot">
+              <span class="counter" id="exp-count">0자 · 0문장</span>
+              <span class="counter">3곳에 그대로 들어갑니다</span>
+            </div>
+            <p class="form-note">여기 적은 문장은 지어내지 않고 그대로 씁니다. Pro 모드에서도 사실은 바꾸지 않습니다.</p>
+          </div>
+
+          <div class="step">
+            <div class="step-head"><span class="step-no">04</span><h2>말투</h2></div>
+            <div class="tone-grid" id="tone-grid" role="radiogroup" aria-label="말투"></div>
+          </div>
+
+          <div class="step" id="product-step">
+            <div class="step-head"><span class="step-no">05</span><h2>제품·가격 <span class="counter">(상세페이지에서 사용)</span></h2></div>
+            <div class="field-row">
+              <label class="field"><span>제품 이름</span>
+                <input id="f-product" class="input" type="text" maxlength="40" placeholder="예) 위에서 채우는 가습기" autocomplete="off" />
+              </label>
+              <label class="field"><span>가격 표기</span>
+                <input id="f-price" class="input" type="text" maxlength="30" placeholder="예) 39,000원" autocomplete="off" />
+              </label>
+            </div>
+            <p class="form-note">가격과 환불 조건은 실제 정책만 적으세요. 앱이 조건을 만들지 않습니다.</p>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" id="btn-assemble">무료로 초안 조립</button>
+          <div class="field-row" style="margin-top:10px">
+            <button type="button" class="btn btn-ghost" id="btn-pro-write">Pro로 완성</button>
+            <button type="button" class="btn btn-ghost" id="btn-bridge-write">구독 AI로 완성</button>
+          </div>
+          <p class="form-note">무료 모드는 API 키도 서버도 쓰지 않습니다. Pro는 3번 화면에서 연결한 키로만 동작합니다.</p>
+        </form>
+      </aside>
+
+      <section class="panel panel-result" aria-labelledby="draft-title">
+        <div class="result-head">
+          <div>
+            <p class="kicker" id="draft-kicker">DRAFT</p>
+            <h2 id="draft-title">아직 원고가 없습니다</h2>
+            <p class="result-meta" id="draft-meta">포맷을 고르고 경험 메모를 넣은 뒤 <strong>무료로 초안 조립</strong>을 누르세요.</p>
+          </div>
+          <div class="score-box" id="score-box" hidden>
+            <span class="score-num" id="score-num">0<span>/100</span></span>
+            <span class="grade" id="score-grade" data-g="A">A</span>
+            <div>
+              <div class="score-label" id="score-label">점검 전</div>
+              <div class="score-label" id="char-line">0자 / 목표 0자</div>
+            </div>
+            <div class="meter" aria-hidden="true"><span id="score-meter" style="width:0%"></span></div>
+          </div>
+        </div>
+
+        <p class="empty-state" id="result-empty"><strong>왼쪽 3단계만 채우면 됩니다.</strong><br />주제 · 독자 · 경험 메모. 나머지는 앱이 조립합니다.</p>
+
+        <div id="result-body" hidden>
+          <div id="titles-wrap" hidden>
+            <div class="step-head"><h2 id="titles-title">제목 5안</h2><span class="counter" id="titles-note">28~42자 권장</span></div>
+            <div class="title-cards" id="titles-list"></div>
+          </div>
+
+          <div class="editor-wrap">
+            <div class="editor-bar">
+              <span class="kicker" id="editor-kicker">본문</span>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-variant">다른 구성</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-polish">AI 티 다듬기</button>
+            </div>
+            <label class="sr-only" for="draft-editor">원고 본문</label>
+            <textarea id="draft-editor" class="editor" spellcheck="false" placeholder="여기에 원고가 나옵니다. 자유롭게 고쳐도 점검은 계속 갱신됩니다."></textarea>
+            <div class="editor-bar">
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-copy">본문 복사</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-md">MD</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-html">HTML</button>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-txt">TXT</button>
+              <span class="spacer"></span>
+              <button type="button" class="btn btn-ghost btn-sm" id="btn-pro-polish">Pro로 다듬기</button>
+            </div>
+            <div class="editor-bar copy-row">
+              <span class="counter">형식 복사</span>
+              <button type="button" class="link-btn muted" id="btn-copy-md">Markdown</button>
+              <button type="button" class="link-btn muted" id="btn-copy-html">HTML</button>
+              <button type="button" class="link-btn muted" id="btn-copy-txt">텍스트</button>
+            </div>
+          </div>
+
+          <div id="thread-extras" hidden>
+            <div class="hook-box">
+              <div class="hb-head">
+                <h3>첫 줄 (훅) — 250자 제한</h3>
+                <span class="hb-num" id="hook-count">0자</span>
+              </div>
+              <p id="hook-text">—</p>
+            </div>
+            <div class="hook-box comment-box" style="margin-top:8px">
+              <div class="hb-head">
+                <h3>자기 첫 댓글 (1분 안에 달기)</h3>
+                <button type="button" class="link-btn" id="btn-copy-comment">복사</button>
+              </div>
+              <label class="sr-only" for="first-comment">자기 첫 댓글</label>
+              <textarea id="first-comment" class="input area"></textarea>
+            </div>
+          </div>
+
+          <details class="details" id="outline-details" open>
+            <summary>구조 · 사진 배치 <span class="sum-meta" id="outline-meta">—</span></summary>
+            <div class="details-body">
+              <div>
+                <p class="kicker">소제목 흐름</p>
+                <ul class="outline-list" id="outline-list"></ul>
+              </div>
+              <div>
+                <p class="kicker">사진·캡처 위치</p>
+                <ul class="photo-list" id="photo-list"></ul>
+              </div>
+              <p class="form-note" id="remaining-note">—</p>
+            </div>
+          </details>
+
+          <details class="details" id="quality-details" open>
+            <summary>점검 결과 <span class="sum-meta" id="quality-meta">—</span></summary>
+            <div class="details-body">
+              <ul class="issue-list" id="issue-list"></ul>
+              <p class="form-note" id="issue-empty" hidden>걸리는 표현이 없습니다. 이대로 올려도 좋습니다.</p>
+              <div class="positive-list" id="positive-list"></div>
+            </div>
+          </details>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ═══ AI 브리지 ═══ -->
+  <section class="view" id="view-bridge" role="tabpanel" aria-labelledby="tab-bridge" hidden>
+    <div class="page-head">
+      <p class="kicker">AI BRIDGE · 무료</p>
+      <h1>내 구독 AI에게 <em>맥락</em>을 넘기기.</h1>
+      <p class="lead">지금 화면의 주제·경험 메모·말투·금지 규칙을 한 장 프롬프트로 묶습니다. 복사해서 ChatGPT·Claude·Gemini에 붙여넣으면 같은 원고를 더 길고 자연스럽게 받을 수 있습니다. API 키는 필요 없습니다.</p>
+    </div>
+    <div class="bridge-grid">
+      <section class="panel">
+        <div class="step-head"><span class="step-no">01</span><h2>프롬프트</h2>
+          <button type="button" class="link-btn" id="btn-bridge-build">지금 입력으로 다시 만들기</button>
+        </div>
+        <div class="bridge-context" id="bridge-context">원고 작성 화면의 입력을 기준으로 만듭니다.</div>
+        <label class="sr-only" for="bridge-prompt">AI에 보낼 프롬프트</label>
+        <textarea id="bridge-prompt" class="input area mono prompt-area" readonly></textarea>
+        <div class="bridge-actions">
+          <button type="button" class="btn btn-primary" id="btn-bridge-copy">프롬프트 복사</button>
+          <button type="button" class="btn btn-ghost" data-open-ai="chatgpt">ChatGPT 열기</button>
+          <button type="button" class="btn btn-ghost" data-open-ai="claude">Claude 열기</button>
+          <button type="button" class="btn btn-ghost" data-open-ai="gemini">Gemini 열기</button>
+        </div>
+        <p class="form-note">새 탭으로 열립니다. 받은 원고는 아래에 붙여넣으면 편집기로 가져옵니다.</p>
+
+        <div class="step-head mt"><span class="step-no">02</span><h2>받은 원고 붙여넣기</h2></div>
+        <label class="sr-only" for="ai-paste">AI가 준 원고</label>
+        <textarea id="ai-paste" class="input area" rows="5" placeholder="AI가 준 원고를 그대로 붙여넣으세요. 제목 후보가 섞여 있으면 본문만 남기고 지우면 됩니다."></textarea>
+        <button type="button" class="btn btn-ghost" id="btn-ai-import">편집기로 가져오기</button>
+      </section>
+
+      <section class="panel">
+        <div class="step-head"><span class="step-no">03</span><h2>이 프롬프트에 들어가는 것</h2></div>
+        <div class="privacy-box">
+          <h3>들어가는 정보</h3>
+          <ul>
+            <li>주제 · 독자 · 핵심 키워드</li>
+            <li>내 경험 메모(적은 그대로)</li>
+            <li>말투와 포맷별 구조 규칙</li>
+            <li>금지 표현 목록(표시광고법 · AI 티)</li>
+          </ul>
+          <p>계정 정보, 연락처, 다른 화면의 내용은 넣지 않습니다. 프롬프트는 이 브라우저에서만 만들어지고, 복사하기 전에는 아무 데도 전송되지 않습니다.</p>
+        </div>
+        <div class="privacy-box" style="margin-top:12px">
+          <h3>왜 구독 AI인가</h3>
+          <p>이미 쓰고 있는 ChatGPT·Claude·Gemini 구독이 있다면 추가 결제 없이 가장 긴 원고를 받을 수 있습니다. 앱은 프롬프트만 만들어 주고, 전송은 사용자가 직접 합니다.</p>
+        </div>
+        <div class="privacy-box" style="margin-top:12px">
+          <h3>받은 원고 검수</h3>
+          <p>가져오면 자동으로 AI 티·금지어·분량을 다시 점검합니다. 그대로 올리기 전에 경험과 수치가 맞는지 한 번만 확인하세요.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ═══ Pro 연결 ═══ -->
+  <section class="view" id="view-pro" role="tabpanel" aria-labelledby="tab-pro" hidden>
+    <div class="page-head">
+      <p class="kicker">PRO MODE · 선택</p>
+      <h1>유료 API를 붙이면, <em>2,000자 원고</em>를 바로.</h1>
+      <p class="lead">키를 넣고 버튼을 누를 때만 요청이 나갑니다. 기본 저장 위치는 이 탭의 메모리(sessionStorage)이고, 창을 닫으면 사라집니다. 연결하지 않아도 무료 모드는 그대로 동작합니다.</p>
+    </div>
+    <div class="pro-grid">
+      <section class="panel">
+        <div class="step-head"><span class="step-no">01</span><h2>제공자 선택</h2><span class="counter">1~3번은 바로 연결</span></div>
+        <div class="provider-list" id="provider-list" role="radiogroup" aria-label="Pro API 제공자"></div>
+
+        <div class="step-head mt"><span class="step-no">02</span><h2>연결 정보</h2></div>
+        <label class="field"><span id="key-label">API 키</span>
+          <input id="pro-key" class="input" type="password" autocomplete="off" spellcheck="false" placeholder="API 키 붙여넣기" />
+        </label>
+        <div class="field-row">
+          <label class="field"><span>모델</span>
+            <input id="pro-model" class="input" type="text" list="model-options" maxlength="80" autocomplete="off" placeholder="모델 이름" />
+            <datalist id="model-options"></datalist>
+          </label>
+          <label class="field"><span>응답 온도</span>
+            <select id="pro-temp" class="input select">
+              <option value="0.4">0.4 · 단정하게</option>
+              <option value="0.7" selected>0.7 · 기본</option>
+              <option value="0.9">0.9 · 표현 넓게</option>
+            </select>
+          </label>
+        </div>
+        <label class="field" id="server-row" hidden><span>자체 서버 주소 (프록시)</span>
+          <input id="pro-server" class="input" type="url" maxlength="300" autocomplete="off" spellcheck="false" placeholder="https://내서버.example.com/write" />
+        </label>
+        <p class="form-note" id="pro-hint">모델 이름은 직접 확인해 바꿀 수 있습니다.</p>
+        <div class="bridge-actions">
+          <button type="button" class="btn btn-primary" id="btn-pro-generate">Pro로 원고 뽑기</button>
+          <button type="button" class="btn btn-ghost" id="btn-pro-polish-now">AI 티 다듬기 요청</button>
+          <button type="button" class="btn btn-ghost" id="btn-pro-clear">연결 지우기</button>
+        </div>
+        <p class="status" id="pro-status" aria-live="polite"></p>
+      </section>
+
+      <section class="panel">
+        <div class="step-head"><span class="step-no">03</span><h2>연결 상태</h2></div>
+        <div class="pro-status" id="pro-desc">
+          <div class="row"><span>제공자</span><b id="pd-provider">OpenAI</b></div>
+          <div class="row"><span>모델</span><b id="pd-model">—</b></div>
+          <div class="row"><span>키</span><b id="pd-key">없음</b></div>
+          <div class="row"><span>보내는 곳</span><b id="pd-endpoint">—</b></div>
+          <div class="row"><span>준비</span><b id="pd-ready">무료 모드</b></div>
+        </div>
+        <p class="form-note" id="pd-note">키를 넣으면 이 탭에서만 유지됩니다.</p>
+        <div class="privacy-box" style="margin-top:12px">
+          <h3>비용·키 안내</h3>
+          <ul>
+            <li>키 발급 계정에 사용료가 청구됩니다(제공자·모델·토큰에 따라 다름).</li>
+            <li>이 앱은 결제를 대신하지 않고, 키를 서버로 보내지 않습니다.</li>
+            <li>공용 PC에서는 <strong>연결 지우기</strong>를 누르세요.</li>
+            <li>키를 저장하지 않으려면 <strong>응답 온도</strong>만 바꿔도 무료 모드는 그대로 씁니다.</li>
+          </ul>
+        </div>
+        <div class="privacy-box" style="margin-top:12px">
+          <h3>보내는 내용</h3>
+          <p>주제·독자·경험 메모·말투·구조 규칙·금지 목록으로 만든 프롬프트 1건과, 다듬기 요청 시 현재 원고 본문입니다. 계정 정보나 연락처는 넣지 않습니다.</p>
+        </div>
+        <button type="button" class="link-btn muted" id="btn-key-page" style="margin-top:10px">키 발급 페이지 열기</button>
+      </section>
+    </div>
+  </section>
+
+  <!-- ═══ 사용 안내 ═══ -->
+  <section class="view" id="view-guide" role="tabpanel" aria-labelledby="tab-guide" hidden>
+    <div class="page-head">
+      <p class="kicker">GUIDE</p>
+      <h1>무료로 쓰는 법과, <em>Pro로 넘어갈 때.</em></h1>
+      <p class="lead">이 앱은 원고를 "대신 써 주는" 도구가 아니라, 구조와 순서를 잡아 주는 도구입니다. 경험 메모가 구체적일수록 결과가 덜 자동처럼 보입니다.</p>
+    </div>
+    <div class="guide-grid">
+      <section class="panel">
+        <div class="guide-section">
+          <h2>1. 세 단계면 초안이 나옵니다</h2>
+          <ul>
+            <li>포맷을 고르고 주제·독자를 한 줄씩 적습니다.</li>
+            <li>경험 메모에 실제로 겪은 일을 2~3줄 적습니다. 여기 적은 문장이 원고의 뼈대가 됩니다.</li>
+            <li>말투를 고르고 <strong>무료로 초안 조립</strong>을 누릅니다.</li>
+          </ul>
+          <p>초안은 소제목·체크리스트·사진 위치까지 갖춘 상태로 나옵니다. 문장을 고치면 오른쪽 점검이 바로 다시 계산됩니다.</p>
+        </div>
+        <div class="guide-section">
+          <h2>2. 포맷별 기준</h2>
+          <table class="rule-table fmt-table">
+            <thead><tr><th>포맷</th><th>구조</th><th>분량</th><th>주의</th></tr></thead>
+            <tbody>
+              <tr><td>네이버 블로그</td><td>제목 5안 · 도입 3~4문장 · 소제목 5단 · 체크리스트 · 비교표 · 끝 질문</td><td>2,200자 목표</td><td>실사 사진 5~6장, 내부링크 2건, AI 생성 이미지 금지</td></tr>
+              <tr><td>스레드·인스타</td><td>250자 훅 · 2~4부 타래 · 마무리 · 자기 첫 댓글</td><td>250~500자</td><td>본문 링크 0건, 캡처 1장, 끝에 질문</td></tr>
+              <tr><td>상세페이지</td><td>문제 · 원인 · 해결 · 증거 · 차별점 · 리스크 리버설 · CTA</td><td>900~1,500자</td><td>최상급·보장 표현 금지, 환불 조건은 실제 정책만</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="guide-section">
+          <h2>3. 점검 항목이 뜻하는 것</h2>
+          <h3>AI 티 표현</h3>
+          <p>"다양한", "최고의", "~에 대한", "그것은"처럼 요약·번역체로 읽히는 표현을 셉니다. <strong>AI 티 다듬기</strong>를 누르면 규칙으로 바꿀 수 있는 것만 자동으로 고칩니다.</p>
+          <h3>표시광고법 위험</h3>
+          <p>근거 없는 1위·최상급·100%·완치·부작용 없음 같은 단정입니다. 자동으로 바꾸지 않습니다. 사실이 아니면 직접 지우세요.</p>
+          <h3>도달 저하 표현</h3>
+          <p>맞팔·공구·DM 유도·링크 유도는 스레드·인스타에서 노출이 줄어드는 표현입니다.</p>
+        </div>
+        <div class="guide-section">
+          <h2>4. 무료 모드와 Pro의 차이</h2>
+          <table class="rule-table">
+            <thead><tr><th></th><th>무료</th><th>Pro</th></tr></thead>
+            <tbody>
+              <tr><td>준비물</td><td>없음</td><td>유료 API 키 또는 자체 서버</td></tr>
+              <tr><td>결과</td><td>구조가 잡힌 초안(1,400자 안팎)</td><td>2,000자 이상 완성 원고</td></tr>
+              <tr><td>비용</td><td>0원</td><td>제공자 계정에 사용료</td></tr>
+              <tr><td>전송</td><td>없음(브라우저 안에서만)</td><td>버튼을 누를 때만 프롬프트 전송</td></tr>
+              <tr><td>AI 티 다듬기</td><td>규칙 기반</td><td>모델에 다시 요청</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="guide-section">
+          <h2>5. 저장과 삭제</h2>
+          <p>입력한 내용과 원고는 이 브라우저의 <code>localStorage</code>에만 남습니다. Pro 키는 기본적으로 <code>sessionStorage</code>에만 두고, 탭을 닫으면 사라집니다. 비우려면 입력 화면에서 내용을 지우거나 브라우저 사이트 데이터를 삭제하세요.</p>
+        </div>
+      </section>
+      <aside class="panel">
+        <h2 style="font-size:15px">자주 막히는 곳</h2>
+        <div class="guide-section" style="margin-top:10px">
+          <h3>원고가 짧게 느껴질 때</h3>
+          <p>경험 메모를 한 줄 더 넣으세요. 앱은 적힌 사실만 쓰기 때문에, 메모가 짧으면 원고도 짧습니다.</p>
+          <h3>AI 티가 남을 때</h3>
+          <p>문장을 60자 아래로 끊고, "결론적으로" 같은 연결어를 지우세요. 그래도 남으면 <strong>Pro로 다듬기</strong>를 쓰세요.</p>
+          <h3>Pro 연결이 실패할 때</h3>
+          <p>OpenAI·Claude는 브라우저 직접 호출을 막는 경우가 있습니다. 그때는 4번 자체 서버(프록시)를 쓰세요. 키 오류(401)와 한도(429)는 메시지로 구분해 알려 줍니다.</p>
+          <h3>모델 이름</h3>
+          <p>제공자마다 이름이 자주 바뀝니다. 기본값이 거부되면 발급 페이지에서 현재 이름을 확인해 바꾸세요.</p>
+        </div>
+        <div class="privacy-box" style="margin-top:14px">
+          <h3>책임 범위</h3>
+          <p>이 앱은 문장을 조립하고 위험 표현을 표시합니다. 사실관계·법적 판단·게시 책임은 작성자에게 있습니다.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong>원탭 원고 스튜디오</strong>
+      <p>블로그·스레드·상세페이지 원고를 조립하는 도구입니다. 올리기 전에 사실과 수치를 직접 확인하세요.</p>
+    </div>
+    <div class="footer-links">
+      <a href="privacy.html" id="footer-privacy">개인정보 처리방침</a>
+      <a href="README.md">사용 안내</a>
+    </div>
+    <p class="footer-note">무료 모드 서버 전송 0건 · 회원가입 없음 · 법률 자문 아님<br />© 2026 One-Tap Draft Studio</p>
+  </div>
+</footer>
+
+<div class="toast-root" id="toast-root" aria-live="polite" aria-atomic="true"></div>
+
+<script src="data.js"></script>
+<script src="engines/copy-psych-engine.js"></script>
+<script src="engines/pro-api-connector.js"></script>
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
