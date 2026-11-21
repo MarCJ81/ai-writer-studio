@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ko" data-theme="light" data-design="designref.v2/cream-editorial">
+<html lang="ko" data-theme="light" data-design="designref.v2/crisp-bento">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>원탭 원고 스튜디오 — 블로그·스레드·상세페이지 완성 원고 조립기</title>
 <meta name="description" content="주제와 내 경험 2~3줄만 넣으면 네이버 블로그 원고, 스레드 훅·첫 댓글, 상세페이지 7단 카피를 조립합니다. API 키 없이 무료로 쓰고, OpenAI·Gemini·Claude·자체 서버를 연결하면 완성 원고를 바로 받습니다. AI 티·표시광고법 위험을 실시간으로 점검합니다." />
-<meta name="theme-color" content="#f3eadd" />
+<meta name="theme-color" content="#FAFAFA" />
 <meta name="color-scheme" content="light dark" />
 <link rel="canonical" href="https://marcj81.github.io/ai-writer-studio/" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -21,10 +21,9 @@
   <div class="topbar-inner">
     <a class="brand" href="#write" data-tab-link="write" aria-label="원탭 원고 스튜디오 홈">
       <span class="brand-mark" aria-hidden="true">
-        <svg viewBox="0 0 40 40" width="34" height="34">
-          <rect x="1" y="1" width="38" height="38" rx="4" fill="none" stroke="currentColor" stroke-width="1.4" />
-          <path d="M10 10h20M10 17h13M10 24h20M10 31h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-          <path d="M28.5 26.5l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        <svg viewBox="0 0 32 32" width="20" height="20">
+          <path d="M8 8h16M8 14h10M8 20h16M8 26h7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          <path d="M23 22l3.4 3.4L23 28.8" fill="none" stroke="#8FA5FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </span>
       <span class="brand-text">
@@ -59,15 +58,32 @@
   <section class="view is-active" id="view-write" role="tabpanel" aria-labelledby="tab-write">
     <div class="hero">
       <div class="hero-copy">
-        <p class="kicker">블로그 · 스레드 · 상세페이지 · 2026</p>
-        <h1>주제 한 줄이면, <em>원고 한 편.</em></h1>
+        <p class="kicker"><b>FREE</b>원고 조립 · 서버 0 · 가입 0</p>
+        <h1>주제 한 줄이면,<br /><em>원고 한 편.</em></h1>
         <p class="hero-lead">포맷과 말투를 고르고, 실제로 겪은 일을 두세 줄 적으면 됩니다. 도입 훅부터 소제목, 체크리스트, 사진 위치, 첫 댓글까지 순서대로 조립합니다. AI 티와 표시광고법 위험은 쓰는 동안 바로 표시됩니다.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#write-form">원고 조립 시작 →</a>
+          <a class="btn btn-ghost" href="#draft-title">점수 확인하기</a>
+        </div>
+        <div class="hero-trust">
+          <span>무료 모드 서버 전송 0건</span><span>입력값은 이 브라우저에만</span><span>쓰던 AI 구독에 프롬프트로</span>
+        </div>
       </div>
       <ul class="hero-facts" aria-label="이 앱의 기준">
         <li><strong>포맷 3종</strong><span>블로그 · 스레드 · 상세페이지</span></li>
-        <li><strong>무료 모드 0원</strong><span>API 키 없이 초안 완성</span></li>
+        <li><strong>무료 0원</strong><span>API 키 없이 초안 완성</span></li>
         <li><strong>Pro 4곳</strong><span>OpenAI · Gemini · Claude · 자체 서버</span></li>
       </ul>
+    </div>
+
+    <div class="sec">
+      <div>
+        <h2>원고 작성</h2>
+        <p>포맷 · 주제 · 경험 · 말투. 네 칸이면 초안이 나옵니다.</p>
+      </div>
+      <div class="sec-tags">
+        <span class="tag live">무료 모드</span><span class="tag">서버 전송 0</span><span class="tag blue">AI 티 점검</span>
+      </div>
     </div>
 
     <div class="studio">
@@ -151,7 +167,7 @@
           </div>
         </div>
 
-        <p class="empty-state" id="result-empty"><strong>왼쪽 3단계만 채우면 됩니다.</strong><br />주제 · 독자 · 경험 메모. 나머지는 앱이 조립합니다.</p>
+        <p class="empty-state" id="result-empty"><strong>포맷 · 주제 · 경험 · 말투만 채우면 됩니다.</strong><br />도입 훅부터 소제목, 사진 위치, 첫 댓글까지 앱이 조립합니다.</p>
 
         <div id="result-body" hidden>
           <div id="titles-wrap" hidden>

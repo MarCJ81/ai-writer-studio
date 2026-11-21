@@ -7,6 +7,22 @@ API 키 없이 100% 무료로 초안이 나오고, 유료 API(또는 자체 서�
 - 무료 모드에서 외부 요청 0건
 - AI 티 · 표시광고법 위험 · 도달 저하 표현 실시간 점검
 
+## 디자인 (A안 · Crisp Bento)
+
+`data-design="designref.v2/crisp-bento"`. 핀터레스트 리서치의 A안 토큰을 그대로 씁니다.
+
+| 항목 | 값 |
+|---|---|
+| 배경 / 타일 / 보조 타일 | `#FAFAFA` / `#FFFFFF` / `#F5F6F7` |
+| 잉크 / 본문 보조 / 라벨 | `#0C0D0F` / `#4A4F55` / `#6B7076` |
+| 보더 / 라운드 | 1px `#E7E8EA` / 카드 16 · 버튼 12 · 필 999 |
+| 액센트(단일) | 코발트 `#2F5BFF` |
+| 헤드라인 | 산세리프(PlexKR) **800**, 자간 `-.045em` |
+
+- 입력 화면은 **타일 벤토**(포맷 · 주제 · 경험 · 말투)로 쪼개고, 결과 화면은 제목·편집기·구조·점검을 각각 타일로 올렸습니다.
+- 라이트/다크 모두 실제 렌더 텍스트 전수 대비 검사(4.5:1) 통과. 다크는 같은 토큰의 잉크 팔레트입니다.
+- hover에서만 그림자, `prefers-reduced-motion` · `prefers-reduced-transparency` · `forced-colors` 대응.
+
 ## 무엇을 만드나
 
 | 포맷 | 산출물 | 기준 |
@@ -72,7 +88,7 @@ API 키 없이 100% 무료로 초안이 나오고, 유료 API(또는 자체 서�
 ```
 apps/ai-writer-studio/
   index.html            화면 4개(원고 작성 · AI 브리지 · Pro 연결 · 사용 안내)
-  styles.css            cream-editorial 토큰, 라이트/다크, 로컬 폰트
+  styles.css            Crisp Bento(A안) 토큰, 라이트/다크, 로컬 폰트
   data.js               포맷·말투·문장 자산·제목 패턴·금지 규칙·예시
   core.js               조립 · 점검 · 프롬프트 · 내보내기 (DOM 없이 동작)
   app.js                화면 조립과 이벤트
@@ -95,7 +111,7 @@ python3 uitest.py
 ```
 
 - `test.js`: 356개 단언 — 카탈로그 · 조사 · 3포맷×3말투×여러 seed 조립 · 점검 · 규칙 교정 · 프롬프트 · 내보내기 · 커넥터 요청/응답 · 파일 위생 · 민감정보 0건
-- `uitest.py`: 187개 검사 — 외부 요청 0건, 콘솔 에러 0, 가로 넘침 0, 무료 조립, 제목 복사, 점검 갱신, AI 티 다듬기, 스레드 250자 훅, MD/HTML/TXT 저장, 브리지 프롬프트, Pro 4곳 모의 호출, 오류 표시, 저장·복원, 다크 모드 대비, 모바일 레이아웃, 스크린샷 `preview-desktop.png` · `preview-mobile.png` · `preview-pro.png`
+- `uitest.py`: 191개 검사 — 외부 요청 0건, 콘솔 에러 0, 가로 넘침 0, 무료 조립, 제목 복사, 점검 갱신, AI 티 다듬기, 스레드 250자 훅, MD/HTML/TXT 저장, 브리지 프롬프트, Pro 4곳 모의 호출, 오류 표시, 저장·복원, 다크 모드 대비, 모바일 레이아웃, 스크린샷 `preview-desktop.png` · `preview-mobile.png` · `preview-pro.png`
 
 ## 보안·한계
 
