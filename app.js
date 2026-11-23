@@ -515,11 +515,18 @@
   var FREE = window.FreeAI || null;
 
   function freePrompt(payload) {
-    // 무료 체험은 출력이 짧다(최대 900토큰). 같은 프롬프트에 분량 지시만 바꿔 붙인다.
-    var extra = '\n\n[무료 체험] 출력은 공백 제외 700~900자로 짧게. 구조(소제목·사진 표기)는 그대로 유지하세요.';
-    var base = String(payload.prompt || '');
-    var room = 2000 - extra.length;
-    return (base.length > room ? base.slice(0, room) : base) + extra;
+    // 짧은 입력에서만 응답이 안정적이다(실측: 긴 프롬프트는 제공자 쪽에서 빈 응답).
+    // 무료 체험은 '맛보기'이므로 도입 3문장만 받고, 전체 원고는 Pro·브리지로 넘긴다.
+    var input = payload && payload.input ? payload.input : {};
+    var topic = String(input.topic || $('#f-topic').value || '').trim().slice(0, 40) || '블로그 주제';
+    var tone = String(input.tone || '구어체').slice(0, 12);
+    var mode = payload && payload.kind === 'polish' ? '다듬기' : '새 원고';
+    if (mode === '다듬기') {
+      var body = String($('#draft-editor').value || '').replace(/\s+/g, ' ').slice(0, 70);
+      return '한국어 원고 다듬기 맛보기. 아래 문장을 자연스럽게 고쳐 2문장으로: ' + body;
+    }
+    return '한국어 블로그 ' + mode + ' 맛보기. 주제: ' + topic + '. 말투: ' + tone +
+      '. 도입 3문장만, 220자 안팎으로 써 주세요.';
   }
 
   function freeUpgrade(res) {
