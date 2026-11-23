@@ -570,6 +570,15 @@
       }
       var text = C.parseProOutput(res.text || '');
       if (!text) { setStatus('응답은 왔지만 글이 비어 있습니다. 잠시 뒤 다시 시도해 주세요.', 'error'); return; }
+      var current = String($('#draft-editor').value || '').trim();
+      if (current.length > 120) {
+        // 이미 원고가 있으면 덮어쓰지 않는다. 맛보기는 복사해 주고 초안은 그대로 둔다.
+        copyText(text, null, '무료 맛보기 문장을 복사했습니다.');
+        var kept = ['무료 맛보기 3문장을 복사했습니다. 지금 초안(' + C.countChars(current).toLocaleString('ko-KR') + '자)은 그대로 두었습니다.'];
+        if (res.remaining !== undefined && res.remaining !== null) kept.push('남은 맛보기 ' + res.remaining + (res.limit ? '/' + res.limit : '') + '회');
+        setStatus(kept.join(' · '), 'ok');
+        return;
+      }
       $('#draft-editor').value = text;
       autosizeEditor();
       state.draft.body = text;
