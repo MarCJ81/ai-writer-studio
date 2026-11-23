@@ -143,9 +143,11 @@
           <button type="submit" class="btn btn-primary btn-lg" id="btn-assemble">무료로 초안 조립</button>
           <div class="field-row" style="margin-top:10px">
             <button type="button" class="btn btn-ghost" id="btn-pro-write">Pro로 완성</button>
+            <button type="button" class="btn btn-ghost" id="btn-free-write">무료 AI 맛보기</button>
             <button type="button" class="btn btn-ghost" id="btn-bridge-write">구독 AI로 완성</button>
           </div>
-          <p class="form-note">무료 모드는 API 키도 서버도 쓰지 않습니다. Pro는 3번 화면에서 연결한 키로만 동작합니다.</p>
+          <p class="form-note"><span id="free-badge"></span> 무료 모드는 API 키도 서버도 쓰지 않습니다. Pro는 3번 화면에서 연결한 키로만 동작합니다.</p>
+          <div id="free-upgrade" class="free-upgrade-slot"></div>
         </form>
       </aside>
 
@@ -230,6 +232,14 @@
                 <ul class="photo-list" id="photo-list"></ul>
               </div>
               <p class="form-note" id="remaining-note">—</p>
+            </div>
+          </details>
+
+          <details class="details" id="style-details" open>
+            <summary>문체 진단 <span class="sum-meta" id="style-meta">—</span></summary>
+            <div class="details-body">
+              <div class="style-grid" id="style-grid"></div>
+              <ul class="style-tips" id="style-tips"></ul>
             </div>
           </details>
 
@@ -464,6 +474,8 @@
 <script src="data.js"></script>
 <script src="engines/copy-psych-engine.js"></script>
 <script src="engines/pro-api-connector.js"></script>
+<script src="engines/free-ai.js"></script>
+<script src="style.js"></script>
 <script src="core.js"></script>
 <script src="app.js"></script>
 </body>

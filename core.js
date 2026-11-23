@@ -5,11 +5,13 @@
 (function (root, factory) {
   if (typeof module === 'object' && module.exports) {
     var D = require('./data.js');
-    module.exports = factory(D.WriterData || D, require('./engines/copy-psych-engine.js'));
+    var ST = null;
+    try { ST = require('./style.js'); } catch (e) { ST = null; }
+    module.exports = factory(D.WriterData || D, require('./engines/copy-psych-engine.js'), ST);
   } else {
-    root.WriterCore = factory(root.WriterData, root.CopyPsych);
+    root.WriterCore = factory(root.WriterData, root.CopyPsych, root.StyleCheck);
   }
-})(typeof self !== 'undefined' ? self : this, function (D, CP) {
+})(typeof self !== 'undefined' ? self : this, function (D, CP, ST) {
   'use strict';
 
   var VERSION = '1.0.0';
@@ -526,6 +528,22 @@
     if (avg > 90) note('sentence', '문장이 너무 김', 1, 8, '한 문장 평균 ' + avg + '자입니다. 60자 아래로 끊으세요.', []);
     else if (avg > 70) note('sentence', '문장이 긴 편', 1, 4, '한 문장 평균 ' + avg + '자입니다.', []);
     note('dup', '같은 문장 반복', dup.length, Math.min(9, dup.length * 3), '반복된 문장은 지우거나 바꾸세요.', dup);
+    var style = null;
+    if (ST && typeof ST.report === 'function') {
+      try { style = ST.report(t); } catch (e) { style = null; }
+    }
+    if (style && style.ok) {
+      var run = style.endings.maxRun;
+      if (run >= 3) {
+        note('ending', '같은 어미 반복', run, Math.min(3, 1 + Math.floor((run - 3) / 3)),
+          '같은 어미가 ' + run + '문장 연속입니다. 한 문장은 명사형으로 끊어 보세요.',
+          (style.endings.runs[0] ? style.endings.runs[0].samples : []));
+      }
+      if (style.commaHeavy >= 2) {
+        note('comma', '쉼표로 늘어진 문장', style.commaHeavy, Math.min(2, style.commaHeavy),
+          '쉼표가 3개 이상인 긴 문장이 ' + style.commaHeavy + '개 있습니다. 쉼표 자리에서 끊으세요.', []);
+      }
+    }
     if (!struct.ok) note('structure', '구조 미완성', 1, 6, struct.need + '이 필요합니다. 지금 ' + struct.blocks + '개입니다.', []);
     if (!I.experience.length && I.experienceRaw === '') {
       note('exp', '경험 메모 없음', 1, 4, '내 경험 2~3줄을 넣으면 3곳이 구체적으로 바뀝니다.', []);
@@ -558,6 +576,7 @@
       aiExtra: extra,
       friction: det.friction,
       frictionGroups: det.groups,
+      style: style,
       structure: struct,
       duplicates: dup,
       positives: positives,
@@ -906,6 +925,7 @@
     buildTitles: buildTitles,
 
     scoreDraft: scoreDraft,
+    styleReport: function (text) { return ST && ST.report ? ST.report(text) : null; },
     gradeOf: gradeOf,
     localPolish: localPolish,
     duplicateSentences: duplicateSentences,

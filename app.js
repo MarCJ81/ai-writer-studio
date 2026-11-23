@@ -465,8 +465,116 @@
     $('#quality-meta').textContent = (r.items || []).length
       ? (r.items.length + '개 항목 · −' + Math.round(100 - r.score) + '점')
       : '걸리는 항목 없음';
+    renderStyle(r.style);
     updateHook();
     updateRemaining();
+  }
+
+  /* ── 문체 진단 (style.js) ─────────────────────────────── */
+  function renderStyle(st) {
+    var grid = $('#style-grid');
+    var tips = $('#style-tips');
+    var meta = $('#style-meta');
+    if (!grid) return;
+    if (!st || !st.ok) {
+      grid.innerHTML = '';
+      tips.innerHTML = '';
+      if (meta) meta.textContent = '본문을 넣으면 진단합니다';
+      return;
+    }
+    function row(label, value, score, lv) {
+      return '<div class="style-row" data-lv="' + (lv || (score !== null && score < 70 ? 'warn' : 'ok')) + '">' +
+        '<b>' + esc(label) + '</b>' +
+        '<span class="sv">' + value + '</span>' +
+        (score === null ? '' : '<span class="mini"><i style="width:' + Math.max(4, score) + '%"></i></span>') +
+        '</div>';
+    }
+    var rows = [];
+    rows.push(row('문장 리듬',
+      '평균 ' + st.length.avg + '자 · 가장 긴 ' + st.length.max + '자', st.scores.length));
+    rows.push(row('어미 다양성',
+      '서로 다른 어미 ' + st.endings.variety + '%' + (st.endings.maxRun >= 3 ? ' · ' + st.endings.maxRun + '문장 연속' : ''),
+      st.scores.endings));
+    rows.push(row('수동·번역체',
+      (st.passive.length + st.translationese.length) + '곳 · 1,000자당 ' + st.passiveDensity + '곳',
+      st.scores.passivity));
+    if (st.connectors.length) {
+      rows.push(row('연결어 반복', '"' + esc(st.connectors[0].word) + '" ' + st.connectors[0].count + '회', null, st.connectors[0].count >= 4 ? 'warn' : 'ok'));
+    }
+    if (st.starts.length) {
+      rows.push(row('문장 첫 단어', '"' + esc(st.starts[0].word) + '"로 시작 ' + st.starts[0].count + '개', null, st.starts[0].count >= 4 ? 'warn' : 'ok'));
+    }
+    grid.innerHTML = rows.join('');
+    tips.innerHTML = (st.tips || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
+    if (meta) {
+      meta.textContent = '문체 ' + st.scores.total + '점 · 후보 ' + (st.tips || []).length + '개';
+    }
+  }
+
+  /* ── 무료 AI 맛보기 (free-ai.js) ──────────────────────── */
+  var FREE = window.FreeAI || null;
+
+  function freePrompt(payload) {
+    // 무료 체험은 출력이 짧다(최대 900토큰). 같은 프롬프트에 분량 지시만 바꿔 붙인다.
+    var extra = '\n\n[무료 체험] 출력은 공백 제외 700~900자로 짧게. 구조(소제목·사진 표기)는 그대로 유지하세요.';
+    var base = String(payload.prompt || '');
+    var room = 2000 - extra.length;
+    return (base.length > room ? base.slice(0, room) : base) + extra;
+  }
+
+  function freeUpgrade(res) {
+    if (!FREE || !res) return;
+    var host = $('#free-upgrade');
+    if (!host) return;
+    FREE.mountUpgrade(host, res, {
+      onConnectKey: function () { switchTab('pro'); toast('Pro 화면에서 키를 넣으면 이어서 쓸 수 있습니다.'); },
+      onBridge: function () { buildBridge(); switchTab('bridge'); }
+    });
+  }
+
+  function runFree(kind) {
+    if (!FREE) { toast('무료 체험 모듈을 불러오지 못했습니다. 새로고침해 주세요.'); return; }
+    if (state.busy) return;
+    if (!state.draft || !$('#draft-editor').value.trim()) {
+      if (!$('#f-topic').value.trim()) { toast('주제를 먼저 적어 주세요.'); switchTab('write'); $('#f-topic').focus(); return; }
+      if (!state.draft) assemble();
+    }
+    var payload = kind === 'polish'
+      ? C.buildPolishPrompt($('#draft-editor').value, currentInput())
+      : C.buildPrompt(currentInput(), state.draft);
+    var btn = $('#btn-free-write');
+    state.busy = true;
+    if (btn) { btn.disabled = true; btn.textContent = '무료 AI가 쓰는 중…'; }
+    setStatus('무료 체험으로 요청 중… (보통 3~10초)', 'busy');
+    var host = $('#free-upgrade');
+    if (host) host.innerHTML = '';
+    FREE.generate({
+      prompt: freePrompt(payload),
+      system: payload.system,
+      options: { temperature: 0.7, maxTokens: 900 }
+    }).then(function (res) {
+      state.busy = false;
+      if (btn) { btn.disabled = false; btn.textContent = '무료 AI 맛보기'; }
+      if (!res.ok) {
+        freeUpgrade(res);
+        setStatus(res.message, 'error');
+        toast(res.message, 'error');
+        return;
+      }
+      var text = C.parseProOutput(res.text || '');
+      if (!text) { setStatus('응답은 왔지만 글이 비어 있습니다. 잠시 뒤 다시 시도해 주세요.', 'error'); return; }
+      $('#draft-editor').value = text;
+      autosizeEditor();
+      state.draft.body = text;
+      runScore();
+      saveStore(true);
+      var bits = ['무료 맛보기 원고를 넣었습니다.', C.countChars(text).toLocaleString('ko-KR') + '자'];
+      if (res.remaining !== undefined && res.remaining !== null) bits.push('남은 맛보기 ' + res.remaining + (res.limit ? '/' + res.limit : '') + '회');
+      if (res.clipped) bits.push('입력이 길어 뒤를 줄였습니다');
+      setStatus(bits.join(' · '), 'ok');
+      toast('무료 맛보기 원고를 편집기에 넣었습니다.');
+      switchTab('write');
+    });
   }
 
   /* ── Pro ──────────────────────────────────────────────── */
@@ -743,6 +851,13 @@
       }
       runPro('draft');
     });
+    if (FREE) {
+      FREE.configure({ app: 'ai-writer-studio' });
+      var fb = $('#free-badge');
+      if (fb) FREE.mountBadge(fb);
+    }
+    var freeBtn = $('#btn-free-write');
+    if (freeBtn) freeBtn.addEventListener('click', function () { runFree('draft'); });
     $('#btn-bridge-write').addEventListener('click', function () {
       buildBridge();
       switchTab('bridge');

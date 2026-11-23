@@ -748,3 +748,22 @@ html[data-theme="dark"] .guide-section code { color: var(--accent); }
   .tab.is-active, .btn-primary, .format-card.is-active, .tone-card.is-active, .provider.is-active { border: 1px solid CanvasText; }
   .meter > span { background: Highlight; }
 }
+
+/* ══ 문체 진단 (style.js) ═══════════════════════════════ */
+.style-grid { display: grid; gap: 6px; }
+.style-row {
+  display: grid; grid-template-columns: 96px 1fr auto; align-items: center; gap: 10px;
+  font-size: 12.5px; padding: 7px 10px; border-radius: 8px;
+  background: var(--wash, rgba(0, 0, 0, .03)); border: 1px solid var(--line, rgba(0, 0, 0, .08));
+}
+.style-row[data-lv="warn"] { border-color: color-mix(in srgb, #d97706 40%, transparent); background: color-mix(in srgb, #d97706 7%, transparent); }
+.style-row b { font-weight: 600; font-size: 12px; }
+.style-row .sv { color: var(--muted, #666); font-variant-numeric: tabular-nums; }
+.style-row .mini { width: 54px; height: 4px; border-radius: 999px; background: var(--line, rgba(0,0,0,.1)); overflow: hidden; }
+.style-row .mini i { display: block; height: 100%; background: var(--accent, #2b6cb0); border-radius: 999px; }
+.style-row[data-lv="warn"] .mini i { background: #d97706; }
+.style-tips { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.style-tips li { position: relative; padding-left: 15px; font-size: 12.5px; line-height: 1.55; color: var(--muted, #555); }
+.style-tips li::before { content: "·"; position: absolute; left: 4px; font-weight: 700; color: var(--accent, #2b6cb0); }
+.style-tips:empty { display: none; }
+.free-upgrade-slot:empty { display: none; }
