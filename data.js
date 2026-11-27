@@ -578,6 +578,50 @@
     }
   };
 
+
+  /* ── English labels (EN UI) ───────────────────────────── */
+  if (typeof window !== 'undefined' && window.ONETAP_LANG === 'en') {
+    FORMATS.forEach(function (f) {
+      if (f.id === 'blog') { f.label = 'Naver blog'; f.tagline = '5 titles + 5-section body + photo cues'; }
+      if (f.id === 'thread') { f.label = 'Threads · Instagram'; f.tagline = 'A 250-character hook + your own first comment'; }
+      if (f.id === 'sales') { f.label = 'Sales page'; f.tagline = '7-step persuasion + risk reversal'; }
+    });
+    TONES.forEach(function (t) {
+      if (t.id === 'talk') { t.label = 'Conversational'; t.desc = 'Short sentences, spoken style. Blog stays polite, Threads goes plain.'; t.sample = '"It took three purchases to see it. My criteria were the problem."'; }
+      if (t.id === 'pro') { t.label = 'Expert explainer'; t.desc = 'Formal. Criteria and order come first.'; t.sample = '"There are three criteria. The order decides the outcome."'; }
+      if (t.id === 'honest') { t.label = 'Honest review'; t.desc = 'Polite and candid. Admits the weak points first.'; t.sample = '"Honestly, it felt like wasted money at first. Looking back, I just had the order wrong."'; }
+    });
+  }
+
+  /* ── English sample input (EN UI) ─────────────────────── */
+  if (typeof window !== 'undefined' && window.ONETAP_LANG === 'en') {
+    SAMPLES = {
+      blog: {
+        topic: 'choosing a winter humidifier',
+        target: 'working parents with small kids',
+        experience: 'I bought three humidifiers last winter and threw two away.\nThe first was too loud to run at night, and the second was a pain to refill so I stopped using it.\nThe one I have now fills from the top, and that alone cut 20 minutes off my morning routine.',
+        keyword: 'tank cleaning',
+        tone: 'talk'
+      },
+      thread: {
+        topic: 'choosing a humidifier',
+        target: 'parents with small kids',
+        experience: 'Three humidifiers, two binned.\nThe loud one never ran at night, the awkward tank meant I stopped using it.\nThe one I have now just fills from the top.',
+        keyword: 'tank cleaning',
+        tone: 'talk'
+      },
+      sales: {
+        topic: 'morning routine time',
+        target: 'parents doing school drop-off alone before work',
+        experience: 'Changing the humidifier saved 20 minutes every morning.\nIt fills from the top, so the tank never comes out.',
+        keyword: 'tank cleaning',
+        product: 'top-fill humidifier',
+        price: 'varies by bundle',
+        tone: 'talk'
+      }
+    };
+  }
+
   var CHECKS = [
     'AI 티 표현 0건에 가깝게',
     '표시광고법 위험 표현 걸러내기',

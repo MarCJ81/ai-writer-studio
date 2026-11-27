@@ -402,6 +402,15 @@
 
   function buildDraft(input) {
     var I = normalizeInput(input);
+    if (typeof window !== 'undefined' && window.ONETAP_LANG === 'en') {
+      var dEn = buildDraftEN(I);
+      dEn.input = I;
+      dEn.chars = countChars(dEn.body);
+      dEn.charsWithSpace = dEn.body.length;
+      dEn.target = formatById(I.format).target;
+      dEn.usedExperience = I.experience.length;
+      return dEn;
+    }
     var draft;
     if (I.format === 'thread') draft = threadDraft(I);
     else if (I.format === 'sales') draft = salesDraft(I);
@@ -412,6 +421,165 @@
     draft.target = formatById(I.format).target;
     draft.usedExperience = I.experience.length;
     return draft;
+  }
+
+
+  /* ==========================================================
+     English draft builder (EN UI). Korean builder above unchanged.
+     ========================================================== */
+  function enTitles(I) {
+    var t = I.topic, who = I.audience || 'first-time readers';
+    var kw = I.keyword || t;
+    return [
+      kw + ': the order that saves you a second purchase',
+      'What ' + who + ' should check before ' + t,
+      'I got ' + t + ' wrong twice — the criteria were the problem',
+      kw + ' in 3 checks, from someone who tried it',
+      t + ' — what actually changed after two months'
+    ];
+  }
+
+  function enCtx(I) {
+    return {
+      topic: I.topic,
+      who: I.audience || 'readers',
+      kw: I.keyword || I.topic,
+      price: I.price || ''
+    };
+  }
+
+  function buildDraftEN(I) {
+    var exp = (I.experience || []).slice();
+    var c = enCtx(I);
+    var photosBlog = [
+      'A photo of the spot as it is now. Before tidying is even better. Only your own shots.',
+      'A photo of the thing that failed, or a receipt and order history. Blur names and numbers.',
+      'A photo of how you use it now, hands visible. Real photos beat screenshots.',
+      'A photo of the note where you wrote the three criteria. Handwriting is fine.',
+      'A wide closing shot — desk, storage or where it sits.',
+      'Two options side by side. Skip it if you only have one.'
+    ];
+    var photosThread = ['One real screenshot or photo that shows the scene.'];
+    var photosSales = ['A photo of the product in use.', 'A close-up that proves the detail.', 'Before and after, side by side.'];
+    var body = [];
+    var titles = enTitles(I);
+
+    if (I.format === 'thread') {
+      var hook = (exp[0] ? exp[0] : 'I spent two months on ' + c.topic + ' before the obvious thing worked.') ;
+      var b1 = exp[1] || 'The first attempt looked fine on paper and failed in a week.';
+      var b2 = exp[2] || 'What changed was the order, not the product.';
+      var b3 = 'Three checks: how often you touch it, how long it takes to clean, and what it costs to run.';
+      var b4 = 'If one of those numbers is a surprise, you are looking at the wrong option.';
+      var close = 'That is it. Nothing else moved the result for me.';
+      var comment = 'What did you get wrong first? I will add it to the next post.';
+      var blocks = [hook, b1, b2, b3, b4, close].filter(Boolean);
+      return {
+        format: 'thread',
+        body: blocks.join('\n\n'),
+        titles: [],
+        hook: hook,
+        hookChars: hook.length,
+        firstComment: comment,
+        photos: photosThread,
+        outline: blocks.map(function (b, i) {
+          return { label: i === 0 ? 'Hook (250 chars)' : (i === blocks.length - 1 ? 'Close' : 'Part ' + (i + 1)), text: b };
+        })
+      };
+    }
+
+    if (I.format === 'sales') {
+      var s1 = '■ The problem\n' + (exp[0] || c.topic + ' looks simple until you have to choose one.');
+      var s2 = '■ Why it happens\nMost comparisons list features. Nobody lists the order you use them in.';
+      var s3 = '■ The fix\n' + (exp[1] || 'Pick three checks that matter daily, then compare only those.');
+      var s4 = '■ Proof\n' + (exp[2] || 'Two months of use, two replacements, one order that finally held.');
+      var s5 = '■ What makes it different\n' + (c.kw || c.topic) + ' is judged on the daily cost, not the spec sheet.';
+      var s6 = '■ Risk reversal\n' + (I.price ? 'Price: ' + I.price + '. ' : '') + 'Return terms are whatever the seller actually offers — check before buying.';
+      var s7 = '■ Next step\nOpen the page and compare the three checks above.';
+      body = [s1, s2, s3, s4, s5, s6, s7];
+      return {
+        format: 'sales',
+        body: body.join('\n\n'),
+        titles: titles,
+        hook: '',
+        firstComment: '',
+        photos: photosSales,
+        outline: [
+          { label: 'Problem' }, { label: 'Cause' }, { label: 'Fix' }, { label: 'Proof' },
+          { label: 'Difference' }, { label: 'Risk reversal' }, { label: 'CTA' }
+        ]
+      };
+    }
+
+    var open = (exp[0] || 'I bought ' + c.topic + ' twice before I understood what I was choosing.');
+    body.push(open);
+    body.push('If you are ' + c.who + ', the hard part is not the price. It is the order you check things in.');
+    body.push('I got that order wrong for two months, and it cost more than the product did.');
+    body.push('Here are the three checks I use now, in the order that finally worked.');
+    body.push('');
+    body.push('[Photo 1] ' + photosBlog[0]);
+    body.push('');
+    body.push('■ Why ' + c.who + ' get stuck here');
+    body.push(exp[1] || 'Every listing looks good in photos. The difference only shows up in daily use.');
+    body.push('I picked on looks first, then on reviews, and neither told me how often I would clean it.');
+    body.push('So the first check is not quality. It is how often the thing asks for your hands.');
+    body.push('');
+    body.push('[Photo 2] ' + photosBlog[1]);
+    body.push('');
+    body.push('■ The three criteria');
+    body.push('1. How often you touch it in a day. If the answer is "constantly", the rest does not matter.');
+    body.push('2. How long cleaning takes. Ten minutes daily is 60 hours a year.');
+    body.push('3. What it costs to run, not just to buy.');
+    body.push('');
+    body.push('■ The order I use now');
+    body.push(exp[2] || 'I start with the daily routine, then the cleaning time, then the price.');
+    body.push('It takes about 20 minutes on a weekend and it has not failed me yet.');
+    body.push('');
+    body.push('[Photo 3] ' + photosBlog[2]);
+    body.push('');
+    body.push('■ Checklist before you buy');
+    body.push('- Can you clean it in under ten minutes?');
+    body.push('- Does it fit where you will actually use it?');
+    body.push('- Are the consumables easy to buy nearby?');
+    body.push('- Is the return window long enough to test it?');
+    body.push('- Would you still want it at full price?');
+    body.push('');
+    body.push('[Photo 4] ' + photosBlog[3]);
+    body.push('');
+    body.push('[Comparison] Last check before buying');
+    body.push('Item | Pass criteria | My note');
+    body.push('Daily use | Do you touch it once a day or more | ');
+    body.push('Cleaning | Under ten minutes | ');
+    body.push('Running cost | Predictable per month | ');
+    body.push('');
+    body.push('■ Honest review');
+    body.push('What worked: the routine got shorter once the order was right.');
+    body.push('What did not: the first unit was still the wrong size for the room.');
+    body.push('Who it suits: anyone who will actually do the ten minutes.');
+    body.push('');
+    body.push('[Photo 5] ' + photosBlog[4]);
+    body.push('');
+    body.push('If you are choosing now, start with the checks above before the price.');
+    body.push('It is not a big decision. It is three questions asked in the right order.');
+    body.push('What did you get wrong first? Tell me in the comments.');
+    body.push('');
+    body.push('[Photo 6] ' + photosBlog[5]);
+    body.push('[Internal links] Add two earlier posts on the same topic here, or delete the line.');
+
+    return {
+      format: 'blog',
+      body: body.join('\n'),
+      titles: titles,
+      hook: '',
+      firstComment: '',
+      photos: photosBlog,
+      outline: [
+        { label: 'Why ' + c.who + ' get stuck here' },
+        { label: 'The three criteria' },
+        { label: 'The order I use now' },
+        { label: 'Checklist before you buy' },
+        { label: 'Honest review' }
+      ]
+    };
   }
 
   /* ==========================================================
